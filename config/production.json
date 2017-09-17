@@ -1,0 +1,5 @@
+
+
+{
+  "dbURL" : "mongodb://moviestoreuser:moviestoreuser@ds135364.mlab.com:35364/moviestore"
+}

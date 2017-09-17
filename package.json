@@ -1,0 +1,38 @@
+
+
+{
+  "name": "movie-store-api",
+  "version": "0.0.1",
+  "description": "RESTful apis for online movie rental store",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArslanKhanAK57/movie-store-api.git"
+  },
+  "keywords": [
+    "movie",
+    "movies",
+    "rent",
+    "rental",
+    "online",
+    "restful"
+  ],
+  "author": "arslan khan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArslanKhanAK57/movie-store-api/issues"
+  },
+  "homepage": "https://github.com/ArslanKhanAK57/movie-store-api#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "jsontoxml": "0.0.11",
+    "mongoose": "^4.11.11",
+    "xml": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
