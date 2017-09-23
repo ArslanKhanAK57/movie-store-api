@@ -1,4 +1,4 @@
-module.exports = function (userController, jwt, config) {
+module.exports = function (userController, tokenController, jwt, config) {
 
     var auth = {
         login : function(req, res) {
@@ -24,7 +24,10 @@ module.exports = function (userController, jwt, config) {
                     return;
                 }
                 else {
-                    res.json(generateToken());
+                    var token = generateToken(user);
+                    tokenController.addToken(token, function() {
+                        res.json(token);
+                    });
                 }
             })
         }
@@ -32,7 +35,7 @@ module.exports = function (userController, jwt, config) {
 
     };
 
-    function generateToken() {
+    function generateToken(user) {
         var expirationDate = expiresIn(7);
         var token = jwt.encode({
             exp: expirationDate
@@ -40,6 +43,7 @@ module.exports = function (userController, jwt, config) {
 
         return {
             token : token,
+            userId : user._id,
             expirationDate : expirationDate
         }
     }

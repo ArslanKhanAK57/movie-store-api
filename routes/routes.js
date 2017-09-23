@@ -21,12 +21,10 @@ module.exports = function(express, app, controllers, jsontoxml) {
 
     router.get('/api/v1/movies', function(req, res){
         controllers.movieController.findMovies(req.query.searchCriteria, req.query.searchString, function(movies){
-            // // res.json(movies);
-            // console.log(movies);
+            res.json(movies);
             // res.header('Content-Type', 'text/xml');
-            // console.log(jsontoxml(movies));
             // res.send(jsontoxml(movies));
-            res.sendData(movies);
+            // res.sendData(movies);
         });
     });
 
