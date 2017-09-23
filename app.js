@@ -21,7 +21,7 @@ var middlewares = require('./middlewares/middlewares')(jwt, config, controllers,
 
 app.use(bodyParser.json());
 
-app.all('/api/v1/*', [middlewares.validateRequest, middlewares.authorizeRequest]);
+app.all('/api/v1/*', [middlewares.authenticateRequest, middlewares.authorizeRequest]);
 require('./routes/routes')(express, app, controllers, jsontoxml);
 
 app.use(function(req, res, next) {
