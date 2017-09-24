@@ -1,63 +1,111 @@
 
 
-module.exports = function (userModel, customerController) {
+module.exports = function (userModel, customerController, errorCodes) {
 
-    var signup = function(req, res) {
-        var userToBeCreated = req.body;
+    var userController = {
 
-        findOne({email : userToBeCreated.email}, function(err, user) {
+        signup : function(req, res) {
 
-            if ( err ) {
-                res.send(err);
-            }
-            else if ( user ) {
-                res.send("Username already exists");
-            }
-            else {
-                var newUser = new userModel({
-                    email: userToBeCreated.email,
-                    password: userToBeCreated.password,
-                    role: userToBeCreated.role.toUpperCase(),
-                    address: userToBeCreated.address,
-                    name: userToBeCreated.name,
-                    status: 'ACTIVE',
-                    createdDate: new Date(),
-                    updateDate: new Date()
-                });
+            var userToBeCreated = req.body;
 
-                newUser.save(newUser, function (err) {
+            if ( userToBeCreated.role.toUpperCase() === 'CUSTOMER' ) {
+
+                userModel.findOne({email: userToBeCreated.email}, function (err, user) {
+
                     if (err) {
-                        res.send(err);
+                        res.sendResponse("USR_ERR_0002", "ERROR", null, errorCodes["USR_ERR_0002"], 200);
+                    }
+                    else if (user) {
+                        res.sendResponse("USR_ERR_0001", "ERROR", null, errorCodes["USR_ERR_0001"], 200);
                     }
                     else {
-                        if ( newUser.role === 'CUSTOMER' ) {
-                            customerController.addCustomer(newUser._id, function(err, newCustomer){
-                                if ( err ) {
-                                    res.send("Error occurred while creating customer");
+                        var newUser = new userModel({
+                            email: userToBeCreated.email,
+                            password: userToBeCreated.password,
+                            role: userToBeCreated.role.toUpperCase(),
+                            address: userToBeCreated.address,
+                            name: userToBeCreated.name,
+                            status: 'ACTIVE',
+                            createdDate: new Date(),
+                            updateDate: new Date()
+                        });
+
+                        newUser.save(newUser, function (err) {
+                            if (err) {
+                                res.sendResponse("USR_ERR_0003", "ERROR", null, errorCodes["USR_ERR_0003"], 200);
+                            }
+                            else {
+                                if (newUser.role === 'CUSTOMER') {
+                                    customerController.addCustomer(newUser._id, function (err, newCustomer) {
+                                        if (err) {
+                                            res.sendResponse("USR_ERR_0004", "ERROR", null, errorCodes["USR_ERR_0004"], 200);
+                                        }
+                                        else {
+                                            res.sendResponse("0", "OK", newCustomer, errorCodes["0"], 200);
+                                        }
+                                    })
                                 }
                                 else {
-                                    res.send("created successfully");
+                                    res.sendResponse("0", "OK", newUser, errorCodes["0"], 200);
                                 }
-                            })
-                        }
-                        else {
-                            res.send("created successfully");
-                        }
+                            }
+                        });
                     }
                 });
             }
-        });
+            else {
+                res.sendResponse("USR_ERR_0005", "ERROR", null, errorCodes["USR_ERR_0005"], 200);
+            }
+        },
+
+        addAdminUser : function(req, res) {
+
+            var userToBeCreated = req.body;
+
+            if ( userToBeCreated.role.toUpperCase() === 'ADMIN' ) {
+
+                userModel.findOne({email: userToBeCreated.email}, function (err, user) {
+
+                    if (err) {
+                        res.sendResponse("USR_ERR_0002", "ERROR", null, errorCodes["USR_ERR_0002"], 200);
+                    }
+                    else if (user) {
+                        res.sendResponse("USR_ERR_0001", "ERROR", null, errorCodes["USR_ERR_0001"], 200);
+                    }
+                    else {
+                        var newUser = new userModel({
+                            email: userToBeCreated.email,
+                            password: userToBeCreated.password,
+                            role: userToBeCreated.role.toUpperCase(),
+                            address: userToBeCreated.address,
+                            name: userToBeCreated.name,
+                            status: 'ACTIVE',
+                            createdDate: new Date(),
+                            updateDate: new Date()
+                        });
+
+                        newUser.save(newUser, function (err) {
+                            if (err) {
+                                res.sendResponse("USR_ERR_0003", "ERROR", null, errorCodes["USR_ERR_0003"], 200);
+                            }
+                            else {
+                                res.sendResponse("0", "OK", newUser, errorCodes["0"], 200);
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                res.sendResponse("USR_ERR_0005", "ERROR", null, errorCodes["USR_ERR_0005"], 200);
+            }
+        },
+
+        findOne : function(query, next) {
+            userModel.findOne(query, function(err, user){
+                next(err, user);
+            });
+        }
     };
 
-    var findOne = function(query, next) {
-        userModel.findOne(query, function(err, user){
-            next(err, user);
-        });
-    };
-
-    return {
-        signup : signup,
-        findOne : findOne
-    };
-
+    return userController;
 };

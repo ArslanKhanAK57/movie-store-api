@@ -11,7 +11,8 @@ mongoose.connect(config.dbURL, {
 });
 var models = require('./models/models')(mongoose);
 var jstoxml = require('jstoxml');
-var controllers = require('./controllers/controllers')(models, jwt, config);
+var errorCodes = require('./errorCodes.json');
+var controllers = require('./controllers/controllers')(models, jwt, config, errorCodes);
 var port = process.env.PORT || 4000;
 var env = process.env.NODE_ENV || 'development';
 

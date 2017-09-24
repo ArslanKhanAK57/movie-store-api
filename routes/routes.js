@@ -13,32 +13,36 @@ module.exports = function(express, app, controllers, jstoxml) {
     * */
 
     // get movies
-    router.get('/api/v1/movies', function(req, res){
-        controllers.movieController.findMovies(req.query.searchCriteria, req.query.searchString, function(movies){
-            res.json(movies);
-            // res.sendData(movies);
-        });
-    });
+    router.get('/api/v1/movies', controllers.movieController.findMovies);
 
     // add movie
-    router.post('/api/v1/movies', function(req, res) {
-        controllers.movieController.addNewMovie(req.body, function(response){
-            res.json(response);
-        })
-    });
-
-    // delete movie
-    router.delete('/api/v1/movies/:id', function(req, res) {
-        controllers.movieController.removeMovieById(req.params.id, function(deleted) {
-            res.json(deleted);
-        });
-    });
+    router.post('/api/v1/movies', controllers.movieController.addNewMovie);
 
     // edit movie
-    router.put('/api/v1/movies/:id', function(req, res) {
-        controllers.movieController.editMovie({_id : req.params.id}, req.body, function(err, movie) {
-            res.send(movie);
-        });
+    router.put('/api/v1/movies/:id', controllers.movieController.editMovie);
+
+    // delete movie
+    router.delete('/api/v1/movies/:id', controllers.movieController.removeMovieById);
+
+    // add admin user
+    router.post('/api/v1/users', controllers.userController.addAdminUser);
+
+    // prepare response
+    app.use(function(req, res, next) {
+        res.sendResponse = function(responseCode, responseStatus, responseData, responseMessage, httpCode) {
+            var response = {
+                responseCode : responseCode,
+                responseStatus : responseStatus,
+                responseData : responseData,
+                responseMessage : responseMessage
+            };
+
+            res.header('Content-Type', 'application/json');
+            res.status(httpCode);
+            res.json(response);
+        };
+
+        next();
     });
 
     // app.use(function(req, res, next) {

@@ -18,7 +18,7 @@ module.exports = function(mongoose) {
         },
         role : {
             type : String,
-            enum : ['ADMIN', 'CUSTOMER'],
+            enum : ['SUPER ADMIN', 'ADMIN', 'CUSTOMER'],
             required : true,
             upperCase : true
         },

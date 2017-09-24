@@ -2,36 +2,42 @@
 
 module.exports = function (tokenModel) {
 
-    var addToken = function(token, next) {
+    var tokenController = {
 
-        removeTokens(token.userId, function(err, rowsEffected) {
+        addToken : function(token, next) {
 
-            var newToken = new tokenModel({
-                token : token.token,
-                userId : token.userId,
-                isDeleted : false,
-                createdDate : new Date()
+            removeTokens(token.userId, function(err, rowsEffected) {
+
+                if ( err ) {
+                    next(err, null);
+                }
+                else {
+                    var newToken = new tokenModel({
+                        token: token.token,
+                        userId: token.userId,
+                        isDeleted: false,
+                        createdDate: new Date()
+                    });
+
+                    newToken.save(newToken, function (err) {
+                        next(err, newToken);
+                    });
+                }
             });
+        },
 
-            newToken.save(newToken, function(err) {
-                next();
+        findOne : function(query, next) {
+            tokenModel.findOne(query, function(err, token){
+                next(err, token);
             });
-        });
+        }
     };
 
     var removeTokens = function(userId, next) {
-        tokenModel.update({userId : userId, isDeleted : false}, {$set : { isDeleted : true}}, {}, next);
-    };
-
-    var findOne = function(query, next) {
-        tokenModel.findOne(query, function(err, token){
-            next(err, token);
+        tokenModel.update({userId : userId, isDeleted : false}, {$set : { isDeleted : true}}, {}, function(err, rowsEffected) {
+            next(err, rowsEffected);
         });
     };
 
-    return {
-        addToken : addToken,
-        findOne : findOne
-    };
-
+    return tokenController;
 };

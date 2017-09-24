@@ -1,13 +1,17 @@
 
 
 {
-    "/api/v1/movies" : {
-        "GET" : "ADMIN|CUSTOMER",
-        "POST" : "ADMIN"
-    },
+  "/api/v1/movies" : {
+      "GET" : "SUPER ADMIN|ADMIN|CUSTOMER",
+      "POST" : "SUPER ADMIN|ADMIN"
+  },
 
-    "/api/v1/movies/:id" : {
-        "DELETE" : "ADMIN",
-        "PUT" : "ADMIN"
-    }
+  "/api/v1/movies/:id" : {
+      "DELETE" : "SUPER ADMIN|ADMIN",
+      "PUT" : "SUPER ADMIN|ADMIN"
+  },
+
+  "/api/v1/users" : {
+    "POST" : "SUPER ADMIN"
+  }
 }
