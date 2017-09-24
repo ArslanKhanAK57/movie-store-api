@@ -4,6 +4,10 @@ module.exports = function(express, app, controllers, jstoxml) {
 
     var router = express.Router();
 
+    router.get('/', function(req, res) {
+        res.send('Movie Store API running');
+    });
+
     router.post('/login', controllers.authController.login);
 
     router.post('/signup', controllers.userController.signup);
