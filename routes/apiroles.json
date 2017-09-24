@@ -1,3 +1,13 @@
+
+
 {
-    "/api/v1/movies" : "admin|customer"
+    "/api/v1/movies" : {
+        "GET" : "ADMIN|CUSTOMER",
+        "POST" : "ADMIN"
+    },
+
+    "/api/v1/movies/:id" : {
+        "DELETE" : "ADMIN",
+        "PUT" : "ADMIN"
+    }
 }

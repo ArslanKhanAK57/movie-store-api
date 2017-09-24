@@ -48,8 +48,7 @@ module.exports = function(mongoose) {
         timesRented : Number,
         currentlyRentedBy : {
             type : mongoose.Schema.Types.ObjectId,
-            ref : 'Customer',
-            required : true
+            ref : 'Customer'
         },
         createdDate: {
             type : Date,

@@ -2,20 +2,38 @@
 
 module.exports = function (userModel) {
 
-    var signup = function(userToBeCreated, next) {
-        var newUser = new userModel({
-            email : userToBeCreated.email,
-            password : userToBeCreated.password,
-            role : userToBeCreated.role.toUpperCase(),
-            address : userToBeCreated.address,
-            name : userToBeCreated.name,
-            status : 'ACTIVE',
-            createdDate : new Date(),
-            updateDate : new Date()
-        });
+    var signup = function(req, res) {
+        var userToBeCreated = req.body;
 
-        newUser.save(newUser, function(err) {
-            next();
+        findOne({email : userToBeCreated.email}, function(err, user) {
+
+            if ( err ) {
+                res.send(err);
+            }
+            else if ( user ) {
+                res.send("Username already exists");
+            }
+            else {
+                var newUser = new userModel({
+                    email: userToBeCreated.email,
+                    password: userToBeCreated.password,
+                    role: userToBeCreated.role.toUpperCase(),
+                    address: userToBeCreated.address,
+                    name: userToBeCreated.name,
+                    status: 'ACTIVE',
+                    createdDate: new Date(),
+                    updateDate: new Date()
+                });
+
+                newUser.save(newUser, function (err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else {
+                        res.send("created successfully");
+                    }
+                });
+            }
         });
     };
 

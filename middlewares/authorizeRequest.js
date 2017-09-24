@@ -10,8 +10,10 @@ module.exports = function (jwt, config, controllers, apiRoles) {
             if ( token ) {
                 controllers.userController.findOne({_id : token.userId}, function(err, user) {
                     if ( user ) {
-                        var allowedRoles = apiRoles[req.originalUrl].split("|");
-                        if ( allowedRoles.indexOf(user.role.toLowerCase()) >= 0 ) {
+                        var path = req.path;
+                        var replacedPath = path.replace(/[a-f0-9]{24}/g, ":id");
+                        var allowedRoles = apiRoles[replacedPath][req.method].split("|");
+                        if ( allowedRoles.indexOf(user.role) >= 0 ) {
                             next();
                         }
                         else {
