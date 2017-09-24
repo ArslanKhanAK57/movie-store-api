@@ -1,0 +1,20 @@
+
+
+{
+  "0" : "Successful API request",
+  "MOV_ERR_0001" : "Unable to perform movies search",
+  "MOV_ERR_0002" : "Error occurred while adding a new movie",
+  "MOV_ERR_0003" : "Error occurred while updating a movie",
+  "MOV_ERR_0004" : "Error occurred while deleting a movie",
+
+  "AUTH_ERR_0001" : "Missing username or password",
+  "AUTH_ERR_0002" : "Error occurred while searching user",
+  "AUTH_ERR_0003" : "Invalid username or password",
+  "AUTH_ERR_0004" : "Unable to generate signature token",
+
+  "USR_ERR_0001" : "Username already exists",
+  "USR_ERR_0002" : "Error occurred while searching for existing username",
+  "USR_ERR_0003" : "Unable to create user",
+  "USR_ERR_0004" : "Unable to create customer",
+  "USR_ERR_0005" : "Invalid user role"
+}
