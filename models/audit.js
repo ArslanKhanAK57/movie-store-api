@@ -13,7 +13,7 @@ module.exports = function(mongoose) {
         },
         movieId : {
             type : mongoose.Schema.Types.ObjectId,
-            ref : 'User',
+            ref : 'Movie',
         },
         customerId : {
             type : mongoose.Schema.Types.ObjectId,

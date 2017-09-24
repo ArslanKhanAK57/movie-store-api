@@ -1,6 +1,6 @@
 
 
-module.exports = function (userModel) {
+module.exports = function (userModel, customerController) {
 
     var signup = function(req, res) {
         var userToBeCreated = req.body;
@@ -30,7 +30,19 @@ module.exports = function (userModel) {
                         res.send(err);
                     }
                     else {
-                        res.send("created successfully");
+                        if ( newUser.role === 'CUSTOMER' ) {
+                            customerController.addCustomer(newUser._id, function(err, newCustomer){
+                                if ( err ) {
+                                    res.send("Error occurred while creating customer");
+                                }
+                                else {
+                                    res.send("created successfully");
+                                }
+                            })
+                        }
+                        else {
+                            res.send("created successfully");
+                        }
                     }
                 });
             }
