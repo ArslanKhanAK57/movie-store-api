@@ -1,8 +1,13 @@
 
 
-module.exports = function(express, app, controllers, jstoxml) {
+module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
 
     var router = express.Router();
+
+    router.get('/swagger.json', function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
 
     router.get('/', function(req, res) {
         res.send('Movie Store API running');
@@ -17,6 +22,50 @@ module.exports = function(express, app, controllers, jstoxml) {
     * */
 
     // get movies
+
+    /**
+     * @swagger
+     *
+     * definition:
+     *   Bull:
+     *     properties:
+     *       name:
+     *         type: string
+     *       breed:
+     *         type: string
+     *       age:
+     *         type: integer
+     *       sex:
+     *         type: string
+     *
+     *   Puppy:
+     *     properties:
+     *       name:
+     *         type: string
+     *       breed:
+     *         type: string
+     *       age:
+     *         type: integer
+     *       sex: {
+     *         $ref: '#/definitions/Bull'
+     *       }
+     */
+
+    /**
+     * @swagger
+     * /api/puppies:
+     *   get:
+     *     tags:
+     *       - Puppies
+     *     description: Returns all puppies
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: An array of puppies
+     *         schema:
+     *           $ref: '#/definitions/Puppy'
+     */
     router.get('/api/v1/movies', controllers.movieController.findMovies);
 
     // add movie
