@@ -27,44 +27,59 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      * @swagger
      *
      * definition:
-     *   Bull:
+     *   Movie:
      *     properties:
      *       name:
      *         type: string
-     *       breed:
+     *       writer:
      *         type: string
-     *       age:
+     *       director:
+     *         type: string
+     *       producer:
+     *         type: string
+     *       editor:
+     *         type: string
+     *       actors:
+     *         type: string
+     *       year:
      *         type: integer
-     *       sex:
+     *       status:
+     *         type: string
+     *       timesRented:
+     *         type: integer
+     *       createdDate:
+     *         type: string
+     *       updateDate:
      *         type: string
      *
-     *   Puppy:
+     *   GetMoviesResponse:
      *     properties:
-     *       name:
+     *       responseCode:
      *         type: string
-     *       breed:
+     *       responseStatus:
      *         type: string
-     *       age:
+     *       responseMessage:
      *         type: integer
-     *       sex: {
-     *         $ref: '#/definitions/Bull'
+     *       responseData: {
+     *         $ref: '#/definitions/Movie'
      *       }
      */
 
     /**
      * @swagger
-     * /api/puppies:
+     * /api/v1/movies:
      *   get:
      *     tags:
-     *       - Puppies
-     *     description: Returns all puppies
+     *       - Movies
+     *     description: Returns all movies
      *     produces:
      *       - application/json
      *     responses:
      *       200:
-     *         description: An array of puppies
+     *         description: An array of movies
      *         schema:
-     *           $ref: '#/definitions/Puppy'
+     *           type: array
+     *           $ref: '#/definitions/GetMoviesResponse'
      */
     router.get('/api/v1/movies', controllers.movieController.findMovies);
 
