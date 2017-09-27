@@ -60,9 +60,11 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *         type: string
      *       responseMessage:
      *         type: integer
-     *       responseData: {
-     *         $ref: '#/definitions/Movie'
-     *       }
+     *       responseData:
+     *         type: array
+     *         items: {
+     *           $ref: '#/definitions/Movie'
+     *         }
      */
 
     /**
