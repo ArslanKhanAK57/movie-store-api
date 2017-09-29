@@ -7,6 +7,10 @@ module.exports = function (movieModel, errorCodes) {
             var searchCriteria = req.query.searchCriteria;
             var searchString = req.query.searchString;
 
+            if ( !searchCriteria ) {
+                res.sendResponse("COMM_ERR_0001", "ERROR", null, errorCodes["COMM_ERR_0001"] + ". searchCriteria is required", 400);
+            }
+
             if ( searchCriteria === 'ALL' ) {
                 movieModel.find({}, function(err, movies) {
                     if ( err ) {
@@ -17,16 +21,21 @@ module.exports = function (movieModel, errorCodes) {
                     }            })
             }
             else {
-                var query = {};
-                query[searchCriteria] = searchString;
-                movieModel.find(query, function(err, movies) {
-                    if ( err ) {
-                        res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200)
-                    }
-                    else {
-                        res.sendResponse("0", "OK", movies, errorCodes["0"], 200)
-                    }
-                })
+                if ( !searchString ) {
+                    res.sendResponse("COMM_ERR_0001", "ERROR", null, errorCodes["COMM_ERR_0001"] + ". searchString is required", 400);
+                }
+                else {
+                    var query = {};
+                    query[searchCriteria] = searchString;
+                    movieModel.find(query, function (err, movies) {
+                        if (err) {
+                            res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200)
+                        }
+                        else {
+                            res.sendResponse("0", "OK", movies, errorCodes["0"], 200)
+                        }
+                    });
+                }
             }
         },
 

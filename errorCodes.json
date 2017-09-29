@@ -16,5 +16,7 @@
   "USR_ERR_0002" : "Error occurred while searching for existing username",
   "USR_ERR_0003" : "Unable to create user",
   "USR_ERR_0004" : "Unable to create customer",
-  "USR_ERR_0005" : "Invalid user role"
+  "USR_ERR_0005" : "Invalid user role",
+
+  "COMM_ERR_0001" : "Insufficient input parameters"
 }

@@ -27,6 +27,17 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      * @swagger
      *
      * definition:
+     *   ErrorResponse:
+     *     properties:
+     *       responseCode:
+     *         type: string
+     *       responseStatus:
+     *         type: string
+     *       responseMessage:
+     *         type: integer
+     *       responseData:
+     *         type: object
+     *
      *   Movie:
      *     properties:
      *       name:
@@ -74,14 +85,34 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *     tags:
      *       - Movies
      *     description: Returns all movies
+     *     parameters:
+     *       - name: signatureToken
+     *         description: signature token to authenticate and authorize your request
+     *         in: header
+     *         required: true
+     *         type: string
+     *       - name: searchCriteria
+     *         description: column name to perform search on
+     *         in: query
+     *         required: true
+     *         type: string
+     *       - name: searchString
+     *         description: column value to search with. Required only if searchCriteria is other than 'ALL'
+     *         in: query
+     *         required: false
+     *         type: string
      *     produces:
      *       - application/json
      *     responses:
      *       200:
-     *         description: An array of movies
+     *         description: If responseCode '0' then an array of movies in responseData object | If responseCode 'MOV_ERR_0001' then unable to perform movies search
      *         schema:
      *           type: array
      *           $ref: '#/definitions/GetMoviesResponse'
+     *       400:
+     *         description: If responseCode 'COMM_ERR_0001' then insufficient input parameters
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
      */
     router.get('/api/v1/movies', controllers.movieController.findMovies);
 
