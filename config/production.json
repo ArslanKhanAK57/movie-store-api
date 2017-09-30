@@ -3,5 +3,5 @@
 {
   "dbURL" : "mongodb://moviestoreuser:moviestoreuser@ds135364.mlab.com:35364/moviestore",
   "secret" : "ASDFFVRTHEHETYGN$^YY%#$%HGBRGB$WBR#RWGEGW$%#Y$T@#$Y%$G%$G#RGWEGERFBDFV@#$",
-  "host" : "https://moviestoreapi.herokuapp.com/"
+  "host" : "https://moviestoreapi.herokuapp.com"
 }
