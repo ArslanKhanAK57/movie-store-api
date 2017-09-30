@@ -77,16 +77,21 @@ module.exports = function (movieModel, errorCodes) {
             var movieId = req.params.id;
             var movieToBeEdited = req.body;
 
-            movieToBeEdited.updateDate = new Date();
+            if ( !movieId ) {
+                res.sendResponse("COMM_ERR_0001", "ERROR", null, errorCodes["COMM_ERR_0001"], 400);
+            }
+            else {
+                movieToBeEdited.updateDate = new Date();
 
-            movieModel.findOneAndUpdate({_id : movieId}, {$set: movieToBeEdited}, function(err, movie) {
-                if ( err ) {
-                    res.sendResponse("MOV_ERR_0003", "ERROR", null, errorCodes["MOV_ERR_0003"], 200);
-                }
-                else {
-                    res.sendResponse("0", "OK", "Successfully updated movie", errorCodes["0"], 200);
-                }
-            });
+                movieModel.findOneAndUpdate({_id: movieId}, {$set: movieToBeEdited}, function (err, movie) {
+                    if (err) {
+                        res.sendResponse("MOV_ERR_0003", "ERROR", null, errorCodes["MOV_ERR_0003"], 200);
+                    }
+                    else {
+                        res.sendResponse("0", "OK", "Successfully updated movie", errorCodes["0"], 200);
+                    }
+                });
+            }
         },
 
         removeMovieById : function(req, res) {
