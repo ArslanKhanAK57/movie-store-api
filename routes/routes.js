@@ -113,6 +113,25 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       updateDate:
      *         type: string
      *
+     *   User:
+     *     properties:
+     *       email:
+     *         type: string
+     *       password:
+     *         type: string
+     *       role:
+     *         type: string
+     *       address:
+     *         type: string
+     *       name:
+     *         type: string
+     *       status:
+     *         type: string
+     *       createdDate:
+     *         type: string
+     *       updateDate:
+     *         type: string
+     *
      *   SignupResponse:
      *     properties:
      *       responseCode:
@@ -159,6 +178,17 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *         type: integer
      *       responseData:
      *         $ref: '#/definitions/Movie'
+     *
+     *   AddAdminUserResponse:
+     *     properties:
+     *       responseCode:
+     *         type: string
+     *       responseStatus:
+     *         type: string
+     *       responseMessage:
+     *         type: integer
+     *       responseData:
+     *         $ref: '#/definitions/User'
      *
      */
 
@@ -217,12 +247,15 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       - application/json
      *     responses:
      *       200:
-     *         description: If responseCode '0' then newly created customer in response | If responseCode 'USR_ERR_0002' then error occurred while searching for existing username | if responseCode 'USR_ERR_0003' then unable to create new user | if responseCode 'USR_ERR_0004' then unable to create customer
+     *         description: If responseCode 'USR_ERR_0002' then error occurred while searching for existing username | if responseCode 'USR_ERR_0003' then unable to create new user | if responseCode 'USR_ERR_0004' then unable to create customer
      *         schema:
-     *           type: array
+     *           $ref: '#/definitions/ErrorResponse'
+     *       201:
+     *         description: If responseCode '0' then newly created customer in response
+     *         schema:
      *           $ref: '#/definitions/SignupResponse'
      *       400:
-     *         description: If responseCode 'USR_ERR_0005' then invalid user role
+     *         description: If responseCode 'USR_ERR_0005' then invalid user role | if responseCode 'COMM_ERR_0001' then insufficient input parameters
      *         schema:
      *           $ref: '#/definitions/ErrorResponse'
      *       409:
@@ -412,7 +445,53 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      */
     router.delete('/api/v1/movies/:id', controllers.movieController.removeMovieById);
 
-    // add admin user
+    /**
+     * @swagger
+     * /api/v1/users:
+     *   post:
+     *     tags:
+     *       - Users
+     *     description: Create a new admin user
+     *     parameters:
+     *       - in: header
+     *         name: signatureToken
+     *         description: signature token to authenticate and authorize your request
+     *         required: true
+     *         type: string
+     *       - in: body
+     *         name: body
+     *         description: Customer information to signup
+     *         required: true
+     *         schema:
+     *           $ref: '#/definitions/UserBody'
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: If responseCode 'USR_ERR_0002' then unable to find an existing user | if responseCode 'USR_ERR_0003' unable to create user
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       201:
+     *         description: If responseCode '0' then newly created admin user in responseData object
+     *         schema:
+     *           $ref: '#/definitions/AddAdminUserResponse'
+     *       400:
+     *         description: If responseCode 'AUTH_ERR_0007' then signature token missing | If responseCode 'COMM_ERR_0001' then insufficient input parameters
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       401:
+     *         description: If responseCode 'AUTH_ERR_0005' then signature token expired | if responseCode 'AUTH_ERR_0006' then invalid signature token | If responseCode 'AUTH_ERR_0010' then unauthorized user role to call this API
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       404:
+     *         description: If responseCode 'AUTH_ERR_0008' then signature token not found in database | If responseCode 'AUTH_ERR_0009' then user not found
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       409:
+     *         description: If responseCode 'USR_ERR_0001' then username already exists
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     */
     router.post('/api/v1/users', controllers.userController.addAdminUser);
 
     // app.use(function(req, res, next) {
