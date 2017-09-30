@@ -13,20 +13,29 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
         res.send('Movie Store API running');
     });
 
-    router.post('/login', controllers.authController.login);
-
-    router.post('/signup', controllers.userController.signup);
-
-    /*
-    * ########################################### MOVIE ROUTES ###############################################
-    * */
-
-    // get movies
-
     /**
      * @swagger
      *
      * definition:
+     *
+     *   LoginBody:
+     *     properties:
+     *       username:
+     *         type: string
+     *       password:
+     *         type: string
+     *
+     *   Token:
+     *     properties:
+     *       token:
+     *         type: string
+     *       userId:
+     *         type: string
+     *       isDeleted:
+     *         type: boolean
+     *       createdDate:
+     *         type: string
+     *
      *   ErrorResponse:
      *     properties:
      *       responseCode:
@@ -63,6 +72,20 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       updateDate:
      *         type: string
      *
+     *   LoginResponse:
+     *     properties:
+     *       responseCode:
+     *         type: string
+     *       responseStatus:
+     *         type: string
+     *       responseMessage:
+     *         type: integer
+     *       responseData:
+     *         type: array
+     *         items: {
+     *           $ref: '#/definitions/Token'
+     *         }
+     *
      *   GetMoviesResponse:
      *     properties:
      *       responseCode:
@@ -77,6 +100,47 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *           $ref: '#/definitions/Movie'
      *         }
      */
+
+    /**
+     * @swagger
+     * /login:
+     *   post:
+     *     tags:
+     *       - Auth
+     *     description: Login to movie store
+     *     parameters:
+     *       - in: body
+     *         name: body
+     *         description: username and password of user who wants to login
+     *         required: true
+     *         schema:
+     *           $ref: '#/definitions/LoginBody'
+     *     consumes:
+     *       - application/json
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: If responseCode '0' then signature token in response | If responseCode 'AUTH_ERR_0002' then error searching user | if responseCode 'AUTH_ERR_0004' then error generating signature token
+     *         schema:
+     *           type: array
+     *           $ref: '#/definitions/LoginResponse'
+     *       400:
+     *         description: If responseCode 'AUTH_ERR_0001' then missing username or password
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       401:
+     *         description: If responseCode 'AUTH_ERR_0003' then user not found
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     */
+    router.post('/login', controllers.authController.login);
+
+    router.post('/signup', controllers.userController.signup);
+
+    /*
+    * ########################################### MOVIE ROUTES ###############################################
+    * */
 
     /**
      * @swagger

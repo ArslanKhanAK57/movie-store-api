@@ -38,7 +38,7 @@ var port = process.env.PORT || 4000;
 var env = process.env.NODE_ENV || 'development';
 
 var apiRoles = require('./routes/apiroles.json');
-var middlewares = require('./middlewares/middlewares')(jwt, config, controllers, apiRoles);
+var middlewares = require('./middlewares/middlewares')(jwt, config, controllers, apiRoles, errorCodes);
 
 var swaggerJSDoc = require('swagger-jsdoc');
 

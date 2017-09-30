@@ -1,6 +1,6 @@
 
 
-module.exports = function (jwt, config, controllers, apiRoles) {
+module.exports = function (jwt, config, controllers, apiRoles, errorCodes) {
 
     return function(req, res, next) {
 

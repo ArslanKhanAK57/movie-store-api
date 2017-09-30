@@ -11,6 +11,8 @@
   "AUTH_ERR_0002" : "Error occurred while searching user",
   "AUTH_ERR_0003" : "Invalid username or password",
   "AUTH_ERR_0004" : "Unable to generate signature token",
+  "AUTH_ERR_0005" : "Signature token expired",
+  "AUTH_ERR_0006" : "Invalid signature token",
 
   "USR_ERR_0001" : "Username already exists",
   "USR_ERR_0002" : "Error occurred while searching for existing username",
@@ -18,5 +20,6 @@
   "USR_ERR_0004" : "Unable to create customer",
   "USR_ERR_0005" : "Invalid user role",
 
-  "COMM_ERR_0001" : "Insufficient input parameters"
+  "COMM_ERR_0001" : "Insufficient input parameters",
+  "COMM_ERR_0002" : "Internal server error"
 }

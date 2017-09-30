@@ -1,6 +1,6 @@
 
 
-module.exports = function (jwt, config) {
+module.exports = function (jwt, config, errorCodes) {
 
     return function(req, res, next) {
 
@@ -11,31 +11,17 @@ module.exports = function (jwt, config) {
                 var decoded = jwt.decode(token, config.secret);
 
                 if (decoded.exp <= Date.now()) {
-                    res.status(400);
-                    res.json({
-                        "status": 400,
-                        "message": "Token Expired"
-                    });
+                    res.sendResponse("AUTH_ERR_0005", "ERROR", null, errorCodes["AUTH_ERR_0005"], 400);
                     return;
                 }
                 next();
             }
             catch (e) {
-                res.status(500);
-                res.json({
-                    "status": 500,
-                    "message": "Oops something went wrong",
-                    "error": e
-                });
+                res.sendResponse("COMM_ERR_0002", "ERROR", null, errorCodes["COMM_ERR_0002"], 500);
             }
         }
         else {
-            res.status(401);
-            res.json({
-                "status": 401,
-                "message": "Invalid Token or Key"
-            });
-            return;
+            res.sendResponse("AUTH_ERR_0006", "ERROR", null, errorCodes["AUTH_ERR_0006"], 401);
         }
     }
 };

@@ -14,10 +14,10 @@ module.exports = function (movieModel, errorCodes) {
             if ( searchCriteria === 'ALL' ) {
                 movieModel.find({}, function(err, movies) {
                     if ( err ) {
-                        res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200)
+                        res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200);
                     }
                     else {
-                        res.sendResponse("0", "OK", movies, errorCodes["0"], 200)
+                        res.sendResponse("0", "OK", movies, errorCodes["0"], 200);
                     }            })
             }
             else {
@@ -29,10 +29,10 @@ module.exports = function (movieModel, errorCodes) {
                     query[searchCriteria] = searchString;
                     movieModel.find(query, function (err, movies) {
                         if (err) {
-                            res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200)
+                            res.sendResponse("MOV_ERR_0001", "ERROR", null, errorCodes["MOV_ERR_0001"], 200);
                         }
                         else {
-                            res.sendResponse("0", "OK", movies, errorCodes["0"], 200)
+                            res.sendResponse("0", "OK", movies, errorCodes["0"], 200);
                         }
                     });
                 }
