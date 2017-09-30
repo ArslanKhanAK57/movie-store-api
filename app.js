@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var config = require('./config/config');
 var port = process.env.PORT || 4000;
+var path = require('path');
 
 var swaggerJSDoc = require('swagger-jsdoc');
 var swaggerDefinition = {
@@ -72,6 +73,8 @@ app.use(function(req, res, next) {
 
     next();
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.all('/api/v1/*', [middlewares.authenticateRequest, middlewares.authorizeRequest]);
 require('./routes/routes')(express, app, controllers, jstoxml, swaggerSpec);
