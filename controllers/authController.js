@@ -2,14 +2,15 @@ module.exports = function (userController, tokenController, jwt, config, errorCo
 
     var auth = {
         login : function(req, res) {
-            var userName = req.body.userName || '';
+            var username = req.body.username || '';
             var password = req.body.password || '';
 
-            if ( userName === '' || password === '' ) {
+            if ( username === '' || password === '' ) {
                 res.sendResponse("AUTH_ERR_0001", "ERROR", null, errorCodes["AUTH_ERR_0001"], 400);
+                return;
             }
 
-            userController.findOne({email : userName, password: password}, function(err, user) {
+            userController.findOne({email : username, password: password}, function(err, user) {
                 if ( err ) {
                     res.sendResponse("AUTH_ERR_0002", "ERROR", null, errorCodes["AUTH_ERR_0002"], 200);
                 }

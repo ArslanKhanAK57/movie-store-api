@@ -1,10 +1,10 @@
 
 
-module.exports = function (jwt, config, controllers, apiRoles) {
+module.exports = function (jwt, config, controllers, apiRoles, errorCodes) {
 
     return function(req, res, next) {
 
-        var token = (req.body && req.body.signatureToken) || (req.query && req.query.signatureToken) || (req.get('signatureToken'));
+        var token = req.get('signatureToken');
 
         controllers.tokenController.findOne({token : token, isDeleted : false}, function(err, token) {
             if ( token ) {
@@ -17,31 +17,16 @@ module.exports = function (jwt, config, controllers, apiRoles) {
                             next();
                         }
                         else {
-                            res.status(401);
-                            res.json({
-                                "status": 401,
-                                "message": "Unauthorized"
-                            });
-                            return;
+                            res.sendResponse("AUTH_ERR_0010", "ERROR", null, errorCodes["AUTH_ERR_0010"], 401);
                         }
                     }
                     else {
-                        res.status(404);
-                        res.json({
-                            "status": 404,
-                            "message": "User not found"
-                        });
-                        return;
+                        res.sendResponse("AUTH_ERR_0009", "ERROR", null, errorCodes["AUTH_ERR_0009"], 404);
                     }
                 });
             }
             else {
-                res.status(404);
-                res.json({
-                    "status": 404,
-                    "message": "Signature token not found"
-                });
-                return;
+                res.sendResponse("AUTH_ERR_0008", "ERROR", null, errorCodes["AUTH_ERR_0008"], 404);
             }
         });
     }

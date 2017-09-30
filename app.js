@@ -3,6 +3,28 @@
 var express = require('express');
 var app = express();
 var config = require('./config/config');
+var port = process.env.PORT || 4000;
+
+var swaggerJSDoc = require('swagger-jsdoc');
+var swaggerDefinition = {
+    info: {
+        title: 'Node Swagger API',
+        version: '1.0.0',
+        description: 'Demonstrating how to describe a RESTful API with Swagger',
+    },
+    host: config.host === "http://localhost" ? config.host + ":" + port : config.host,
+    basePath: '/'
+};
+
+var options = {
+    // import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // path to the API docs
+    apis: ['./routes/*.js'],
+};
+
+var swaggerSpec = swaggerJSDoc(options);
+
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jwt-simple');
@@ -13,16 +35,46 @@ var models = require('./models/models')(mongoose);
 var jstoxml = require('jstoxml');
 var errorCodes = require('./errorCodes.json');
 var controllers = require('./controllers/controllers')(models, jwt, config, errorCodes);
-var port = process.env.PORT || 4000;
 var env = process.env.NODE_ENV || 'development';
 
 var apiRoles = require('./routes/apiroles.json');
-var middlewares = require('./middlewares/middlewares')(jwt, config, controllers, apiRoles);
+var middlewares = require('./middlewares/middlewares')(jwt, config, controllers, apiRoles, errorCodes);
 
 app.use(bodyParser.json());
 
+app.all('/*', function(req, res, next) {
+    // CORS headers
+    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    // Set custom headers for CORS
+    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key,Authorization,signatureToken');
+    if (req.method == 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
+});
+
+// prepare response
+app.use(function(req, res, next) {
+    res.sendResponse = function(responseCode, responseStatus, responseData, responseMessage, httpCode) {
+        var response = {
+            responseCode : responseCode,
+            responseStatus : responseStatus,
+            responseData : responseData,
+            responseMessage : responseMessage
+        };
+
+        res.header('Content-Type', 'application/json');
+        res.status(httpCode);
+        res.json(response);
+    };
+
+    next();
+});
+
 app.all('/api/v1/*', [middlewares.authenticateRequest, middlewares.authorizeRequest]);
-require('./routes/routes')(express, app, controllers, jstoxml);
+require('./routes/routes')(express, app, controllers, jstoxml, swaggerSpec);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
