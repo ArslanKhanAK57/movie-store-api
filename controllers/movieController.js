@@ -42,29 +42,35 @@ module.exports = function (movieModel, errorCodes) {
         addNewMovie : function(req, res) {
             var movieToBeAdded = req.body;
 
-            var newMovie = new movieModel({
-                name : movieToBeAdded.name,
-                writer : movieToBeAdded.writer,
-                director : movieToBeAdded.director,
-                producer : movieToBeAdded.producer,
-                editor : movieToBeAdded.editor,
-                actors : movieToBeAdded.actors,
-                year : movieToBeAdded.year,
-                status : 'AVAILABLE',
-                timesRented : 0,
-                currentlyRentedBy : null,
-                createdDate : new Date(),
-                updateDate : new Date()
-            });
+            if ( !movieToBeAdded.name || !movieToBeAdded.writer || !movieToBeAdded.director || !movieToBeAdded.producer ||
+                !movieToBeAdded.editor || !movieToBeAdded.actors || !movieToBeAdded.year ) {
+                res.sendResponse("COMM_ERR_0001", "ERROR", null, errorCodes["COMM_ERR_0001"], 400);
+            }
+            else {
+                var newMovie = new movieModel({
+                    name: movieToBeAdded.name,
+                    writer: movieToBeAdded.writer,
+                    director: movieToBeAdded.director,
+                    producer: movieToBeAdded.producer,
+                    editor: movieToBeAdded.editor,
+                    actors: movieToBeAdded.actors,
+                    year: movieToBeAdded.year,
+                    status: 'AVAILABLE',
+                    timesRented: 0,
+                    currentlyRentedBy: null,
+                    createdDate: new Date(),
+                    updateDate: new Date()
+                });
 
-            newMovie.save(newMovie, function(err) {
-                if ( err ) {
-                    res.sendResponse("MOV_ERR_0002", "ERROR", null, errorCodes["MOV_ERR_0002"], 200);
-                }
-                else {
-                    res.sendResponse("0", "OK", newMovie, errorCodes["0"], 201);
-                }
-            });
+                newMovie.save(newMovie, function (err) {
+                    if (err) {
+                        res.sendResponse("MOV_ERR_0002", "ERROR", null, errorCodes["MOV_ERR_0002"], 200);
+                    }
+                    else {
+                        res.sendResponse("0", "OK", newMovie, errorCodes["0"], 201);
+                    }
+                });
+            }
         },
 
         editMovie : function(req, res) {

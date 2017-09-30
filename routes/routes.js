@@ -25,6 +25,23 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       password:
      *         type: string
      *
+     *   MovieBody:
+     *     properties:
+     *       name:
+     *         type: string
+     *       writer:
+     *         type: string
+     *       director:
+     *         type: string
+     *       producer:
+     *         type: string
+     *       editor:
+     *         type: string
+     *       actors:
+     *         type: string
+     *       year:
+     *         type: integer
+     *
      *   Token:
      *     properties:
      *       token:
@@ -105,11 +122,7 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       responseMessage:
      *         type: integer
      *       responseData:
-     *         type: array
-     *         items: {
-     *           $ref: '#/definitions/Customer'
-     *         }
-     *
+     *         $ref: '#/definitions/Customer'
      *
      *   LoginResponse:
      *     properties:
@@ -120,10 +133,7 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       responseMessage:
      *         type: integer
      *       responseData:
-     *         type: array
-     *         items: {
      *           $ref: '#/definitions/Token'
-     *         }
      *
      *   GetMoviesResponse:
      *     properties:
@@ -138,6 +148,18 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *         items: {
      *           $ref: '#/definitions/Movie'
      *         }
+     *
+     *   AddMoviesResponse:
+     *     properties:
+     *       responseCode:
+     *         type: string
+     *       responseStatus:
+     *         type: string
+     *       responseMessage:
+     *         type: integer
+     *       responseData:
+     *         $ref: '#/definitions/Movie'
+     *
      */
 
     /**
@@ -243,7 +265,6 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       200:
      *         description: If responseCode '0' then an array of movies in responseData object | If responseCode 'MOV_ERR_0001' then unable to perform search on movies
      *         schema:
-     *           type: array
      *           $ref: '#/definitions/GetMoviesResponse'
      *       400:
      *         description: If responseCode 'AUTH_ERR_0007' then signature token missing | If responseCode 'COMM_ERR_0001' then insufficient input parameters
@@ -260,7 +281,49 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      */
     router.get('/api/v1/movies', controllers.movieController.findMovies);
 
-    // add movie
+    /**
+     * @swagger
+     * /api/v1/movies:
+     *   post:
+     *     tags:
+     *       - Movies
+     *     description: Create a new movie
+     *     parameters:
+     *       - in: header
+     *         name: signatureToken
+     *         description: signature token to authenticate and authorize your request
+     *         required: true
+     *         type: string
+     *       - in: body
+     *         name: body
+     *         description: information of movie to be created
+     *         required: true
+     *         schema:
+     *           $ref: '#/definitions/MovieBody'
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: If responseCode 'MOV_ERR_0002' then unable to add new movie
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       201:
+     *         description: If responseCode '0' then newly created movie in responseData object
+     *         schema:
+     *           $ref: '#/definitions/AddMoviesResponse'
+     *       400:
+     *         description: If responseCode 'AUTH_ERR_0007' then signature token missing | If responseCode 'COMM_ERR_0001' then insufficient input parameters
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       401:
+     *         description: If responseCode 'AUTH_ERR_0005' then signature token expired | if responseCode 'AUTH_ERR_0006' then invalid signature token | If responseCode 'AUTH_ERR_0010' then unauthorized user role to call this API
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       404:
+     *         description: If responseCode 'AUTH_ERR_0008' then signature token not found in database | If responseCode 'AUTH_ERR_0009' then user not found
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     */
     router.post('/api/v1/movies', controllers.movieController.addNewMovie);
 
     // edit movie
