@@ -2,6 +2,8 @@
 
 var express = require('express');
 var app = express();
+var config = require('./config/config');
+var port = process.env.PORT || 4000;
 
 var swaggerJSDoc = require('swagger-jsdoc');
 var swaggerDefinition = {
@@ -10,8 +12,8 @@ var swaggerDefinition = {
         version: '1.0.0',
         description: 'Demonstrating how to describe a RESTful API with Swagger',
     },
-    host: 'localhost:4000',
-    basePath: '/',
+    host: config.host === "http://localhost" ? config.host + ":" + port : config.host,
+    basePath: '/'
 };
 
 var options = {
@@ -23,7 +25,6 @@ var options = {
 
 var swaggerSpec = swaggerJSDoc(options);
 
-var config = require('./config/config');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jwt-simple');
@@ -34,13 +35,10 @@ var models = require('./models/models')(mongoose);
 var jstoxml = require('jstoxml');
 var errorCodes = require('./errorCodes.json');
 var controllers = require('./controllers/controllers')(models, jwt, config, errorCodes);
-var port = process.env.PORT || 4000;
 var env = process.env.NODE_ENV || 'development';
 
 var apiRoles = require('./routes/apiroles.json');
 var middlewares = require('./middlewares/middlewares')(jwt, config, controllers, apiRoles, errorCodes);
-
-var swaggerJSDoc = require('swagger-jsdoc');
 
 app.use(bodyParser.json());
 
