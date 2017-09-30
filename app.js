@@ -12,7 +12,7 @@ var swaggerDefinition = {
         version: '1.0.0',
         description: 'Demonstrating how to describe a RESTful API with Swagger',
     },
-    host: config.host === "http://localhost" ? config.host + ":" + port : config.host,
+    host: config.host === "localhost" ? config.host + ":" + port : config.host,
     basePath: '/'
 };
 
