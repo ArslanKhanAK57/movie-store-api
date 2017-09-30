@@ -4,24 +4,25 @@ module.exports = function (jwt, config, errorCodes) {
 
     return function(req, res, next) {
 
-        var token = (req.body && req.body.signatureToken) || (req.query && req.query.signatureToken) || (req.get('signatureToken'));
+        var token = req.get('signatureToken');
 
         if (token) {
             try {
                 var decoded = jwt.decode(token, config.secret);
 
                 if (decoded.exp <= Date.now()) {
-                    res.sendResponse("AUTH_ERR_0005", "ERROR", null, errorCodes["AUTH_ERR_0005"], 400);
-                    return;
+                    res.sendResponse("AUTH_ERR_0005", "ERROR", null, errorCodes["AUTH_ERR_0005"], 401);
                 }
-                next();
+                else {
+                    next();
+                }
             }
             catch (e) {
-                res.sendResponse("COMM_ERR_0002", "ERROR", null, errorCodes["COMM_ERR_0002"], 500);
+                res.sendResponse("AUTH_ERR_0006", "ERROR", null, errorCodes["AUTH_ERR_0006"], 401);
             }
         }
         else {
-            res.sendResponse("AUTH_ERR_0006", "ERROR", null, errorCodes["AUTH_ERR_0006"], 401);
+            res.sendResponse("AUTH_ERR_0007", "ERROR", null, errorCodes["AUTH_ERR_0007"], 400);
         }
     }
 };

@@ -16,7 +16,7 @@ module.exports = function (userModel, customerController, errorCodes) {
                         res.sendResponse("USR_ERR_0002", "ERROR", null, errorCodes["USR_ERR_0002"], 200);
                     }
                     else if (user) {
-                        res.sendResponse("USR_ERR_0001", "ERROR", null, errorCodes["USR_ERR_0001"], 200);
+                        res.sendResponse("USR_ERR_0001", "ERROR", null, errorCodes["USR_ERR_0001"], 409);
                     }
                     else {
                         var newUser = new userModel({
@@ -43,7 +43,7 @@ module.exports = function (userModel, customerController, errorCodes) {
                                         else {
                                             res.sendResponse("0", "OK", newCustomer, errorCodes["0"], 200);
                                         }
-                                    })
+                                    });
                                 }
                                 else {
                                     res.sendResponse("0", "OK", newUser, errorCodes["0"], 200);
@@ -54,7 +54,7 @@ module.exports = function (userModel, customerController, errorCodes) {
                 });
             }
             else {
-                res.sendResponse("USR_ERR_0005", "ERROR", null, errorCodes["USR_ERR_0005"], 200);
+                res.sendResponse("USR_ERR_0005", "ERROR", null, errorCodes["USR_ERR_0005"], 400);
             }
         },
 

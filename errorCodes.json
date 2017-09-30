@@ -13,6 +13,10 @@
   "AUTH_ERR_0004" : "Unable to generate signature token",
   "AUTH_ERR_0005" : "Signature token expired",
   "AUTH_ERR_0006" : "Invalid signature token",
+  "AUTH_ERR_0007" : "Signature token missing in request header",
+  "AUTH_ERR_0008" : "Signature token not found in database",
+  "AUTH_ERR_0009" : "User not found",
+  "AUTH_ERR_0010" : "User is unauthorized to call this API",
 
   "USR_ERR_0001" : "Username already exists",
   "USR_ERR_0002" : "Error occurred while searching for existing username",

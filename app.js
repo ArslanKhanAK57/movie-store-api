@@ -49,12 +49,30 @@ app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     // Set custom headers for CORS
-    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+    res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key,Authorization,signatureToken');
     if (req.method == 'OPTIONS') {
         res.status(200).end();
     } else {
         next();
     }
+});
+
+// prepare response
+app.use(function(req, res, next) {
+    res.sendResponse = function(responseCode, responseStatus, responseData, responseMessage, httpCode) {
+        var response = {
+            responseCode : responseCode,
+            responseStatus : responseStatus,
+            responseData : responseData,
+            responseMessage : responseMessage
+        };
+
+        res.header('Content-Type', 'application/json');
+        res.status(httpCode);
+        res.json(response);
+    };
+
+    next();
 });
 
 app.all('/api/v1/*', [middlewares.authenticateRequest, middlewares.authorizeRequest]);
