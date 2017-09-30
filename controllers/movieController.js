@@ -97,14 +97,19 @@ module.exports = function (movieModel, errorCodes) {
         removeMovieById : function(req, res) {
             var movieId = req.params.id;
 
-            movieModel.remove({_id : movieId}, function(err) {
-                if ( err ) {
-                    res.sendResponse("MOV_ERR_0004", "ERROR", null, errorCodes["MOV_ERR_0004"], 200);
-                }
-                else {
-                    res.sendResponse("0", "OK", "Successfully deleted movie " + movieId, errorCodes["0"], 200);
-                }
-            })
+            if ( !movieId ) {
+                res.sendResponse("COMM_ERR_0001", "ERROR", null, errorCodes["COMM_ERR_0001"], 400);
+            }
+            else {
+                movieModel.remove({_id: movieId}, function (err) {
+                    if (err) {
+                        res.sendResponse("MOV_ERR_0004", "ERROR", null, errorCodes["MOV_ERR_0004"], 200);
+                    }
+                    else {
+                        res.sendResponse("0", "OK", "Successfully deleted movie " + movieId, errorCodes["0"], 200);
+                    }
+                });
+            }
         },
 
         findOne : function(query, next) {

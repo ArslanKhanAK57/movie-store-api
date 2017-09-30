@@ -372,7 +372,44 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      */
     router.put('/api/v1/movies/:id', controllers.movieController.editMovie);
 
-    // delete movie
+    /**
+     * @swagger
+     * /api/v1/movies/{id}:
+     *   delete:
+     *     tags:
+     *       - Movies
+     *     description: Delete movie
+     *     parameters:
+     *       - in: header
+     *         name: signatureToken
+     *         description: signature token to authenticate and authorize your request
+     *         required: true
+     *         type: string
+     *       - in: path
+     *         name: id
+     *         description: id of movie to be updated
+     *         required: true
+     *         type: string
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: If responseCode '0' successfully deleted movie | If responseCode 'MOV_ERR_0004' then unable to delete movie
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       400:
+     *         description: If responseCode 'AUTH_ERR_0007' then signature token missing | If responseCode 'COMM_ERR_0001' then insufficient input parameters
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       401:
+     *         description: If responseCode 'AUTH_ERR_0005' then signature token expired | if responseCode 'AUTH_ERR_0006' then invalid signature token | If responseCode 'AUTH_ERR_0010' then unauthorized user role to call this API
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       404:
+     *         description: If responseCode 'AUTH_ERR_0008' then signature token not found in database | If responseCode 'AUTH_ERR_0009' then user not found
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     */
     router.delete('/api/v1/movies/:id', controllers.movieController.removeMovieById);
 
     // add admin user
