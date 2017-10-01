@@ -9,9 +9,9 @@ var path = require('path');
 var swaggerJSDoc = require('swagger-jsdoc');
 var swaggerDefinition = {
     info: {
-        title: 'Node Swagger API',
-        version: '1.0.0',
-        description: 'Demonstrating how to describe a RESTful API with Swagger',
+        title: 'Online Movie Rental Store RESTful APIs',
+        version: '0.0.1',
+        description: 'Documentation of Online Movie Rental Store RESTful APIs'
     },
     host: config.host === "localhost" ? config.host + ":" + port : config.host,
     basePath: '/'
