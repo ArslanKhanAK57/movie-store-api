@@ -30,6 +30,12 @@ module.exports = function (tokenModel) {
             tokenModel.findOne(query, function(err, token){
                 next(err, token);
             });
+        },
+
+        removeToken : function(token, next) {
+            tokenModel.update({token : token}, {$set : { isDeleted : true}}, {}, function(err, rowsEffected) {
+                next(err, rowsEffected);
+            });
         }
     };
 

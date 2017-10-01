@@ -214,7 +214,6 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *       200:
      *         description: If responseCode '0' then signature token in response | If responseCode 'AUTH_ERR_0002' then error searching user | if responseCode 'AUTH_ERR_0004' then error generating signature token
      *         schema:
-     *           type: array
      *           $ref: '#/definitions/LoginResponse'
      *       400:
      *         description: If responseCode 'AUTH_ERR_0001' then missing username or password
@@ -226,6 +225,33 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *           $ref: '#/definitions/ErrorResponse'
      */
     router.post('/login', controllers.authController.login);
+
+    /**
+     * @swagger
+     * /logout:
+     *   get:
+     *     tags:
+     *       - Auth
+     *     description: Logout from movie store
+     *     parameters:
+     *       - in: header
+     *         name: signatureToken
+     *         description: signature token to logout user
+     *         required: true
+     *         type: string
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: If responseCode '0' then successfully logged out | If responseCode 'AUTH_ERR_0011' then unable to remove token
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     *       400:
+     *         description: If responseCode 'AUTH_ERR_0007' then missing signature token in header
+     *         schema:
+     *           $ref: '#/definitions/ErrorResponse'
+     */
+    router.get('/logout', controllers.authController.logout);
 
     /**
      * @swagger
