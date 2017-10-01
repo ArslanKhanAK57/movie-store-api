@@ -29,6 +29,24 @@ module.exports = function (userController, tokenController, jwt, config, errorCo
                     });
                 }
             })
+        },
+
+        logout : function(req, res) {
+            var token = req.get('signatureToken');
+
+            if ( token ) {
+                tokenController.removeToken(token, function(err, rowsEffected) {
+                    if ( err ) {
+                        res.sendResponse("AUTH_ERR_0011", "ERROR", null, errorCodes["AUTH_ERR_0011"], 200);
+                    }
+                    else {
+                        res.sendResponse("0", "OK", "Logged out successfully", errorCodes["0"], 200);
+                    }
+                });
+            }
+            else {
+                res.sendResponse("AUTH_ERR_0007", "ERROR", null, errorCodes["AUTH_ERR_0007"], 400);
+            }
         }
     };
 

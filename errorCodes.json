@@ -17,6 +17,7 @@
   "AUTH_ERR_0008" : "Signature token not found in database",
   "AUTH_ERR_0009" : "User not found",
   "AUTH_ERR_0010" : "User is unauthorized to call this API",
+  "AUTH_ERR_0011" : "Unable to remove signature token",
 
   "USR_ERR_0001" : "Username already exists",
   "USR_ERR_0002" : "Error occurred while searching for existing username",
