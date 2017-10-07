@@ -33,7 +33,6 @@ mongoose.connect(config.dbURL, {
     useMongoClient : true
 });
 var models = require('./models/models')(mongoose);
-var jstoxml = require('jstoxml');
 var errorCodes = require('./errorCodes.json');
 var controllers = require('./controllers/controllers')(models, jwt, config, errorCodes);
 var env = process.env.NODE_ENV || 'development';
@@ -77,7 +76,7 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.all('/api/v1/*', [middlewares.authenticateRequest, middlewares.authorizeRequest]);
-require('./routes/routes')(express, app, controllers, jstoxml, swaggerSpec);
+require('./routes/routes')(express, app, controllers, swaggerSpec);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

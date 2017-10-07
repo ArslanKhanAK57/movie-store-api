@@ -1,6 +1,6 @@
 
 
-module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
+module.exports = function(express, app, controllers, swaggerSpec) {
 
     var router = express.Router();
 
@@ -519,22 +519,6 @@ module.exports = function(express, app, controllers, jstoxml, swaggerSpec) {
      *           $ref: '#/definitions/ErrorResponse'
      */
     router.post('/api/v1/users', controllers.userController.addAdminUser);
-
-    // app.use(function(req, res, next) {
-    //     res.sendData = function(obj) {
-    //
-    //         if (req.accepts('application/xml')) {
-    //             res.header('Content-Type', 'text/xml');
-    //             res.send(jstoxml.toXML(obj));
-    //         }
-    //         else {
-    //             res.header('Content-Type', 'application/json');
-    //             res.send(obj);
-    //         }
-    //     };
-    //
-    //     next();
-    // });
 
     app.use('/', router);
 };
